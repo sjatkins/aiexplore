@@ -15,4 +15,13 @@ def transcribe_path(path, model='base', write_json=False, text_out=True):
             for l in text['text'].split('.'):
                 print(l + '.', file=f)
 
+def transcribe_youtube(what, **kwargs):
+    pass
+
+def transcribe_url(what, **kwargs):
+    pass
+
+def transcribe(what, model='base', write_json=True, text_out=True):
+    pass
+
 
