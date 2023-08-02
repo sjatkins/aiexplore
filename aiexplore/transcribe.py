@@ -1,6 +1,7 @@
 import whisper
 import json
 import os
+import validators
 
 
 def transcribe_path(path, model='base', write_json=False, text_out=True):
@@ -22,6 +23,10 @@ def transcribe_url(what, **kwargs):
     pass
 
 def transcribe(what, model='base', write_json=True, text_out=True):
-    pass
+    args = dict(model=model, write_json=write_json, text_out=text_out)
+    if validators.url(what):
+        return transcribe_url(what, **args)
+    elif os.path.exists(what):
+        return transcribe_path(what, **args)
 
 

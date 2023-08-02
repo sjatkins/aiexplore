@@ -9,5 +9,5 @@ setup(name='aiexplore',
       author_email='sjatkins@protonmoil.com',
       license='internal',
       packages=packages,
-      install_requires = ['sjautils', 'pytube', 'moviepy'],
+      install_requires = ['validators', 'pytube', 'moviepy'],
       zip_safe=False)
