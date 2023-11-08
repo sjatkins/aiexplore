@@ -9,5 +9,10 @@ setup(name='aiexplore',
       author_email='sjatkins@protonmoil.com',
       license='internal',
       packages=packages,
-      install_requires = ['validators', 'pytube', 'moviepy'],
+      entry_points={
+        'console_scripts': [
+            'transcribe = aiexplore.transcribe:transcribe',
+            ]
+      },
+      install_requires = ['validators', 'pytube', 'moviepy', 'sjautils', 'Click'],
       zip_safe=False)

@@ -2,6 +2,7 @@ import whisper
 import json
 import os
 import validators
+import click
 import moviepy.editor as mp
 from mimetypes import guess_type
 from sjautils.commands import download_video
@@ -13,7 +14,7 @@ def is_youtube_url(url):
 
 def transcribe_path(path, model='base', write_json=False, text_out=True):
     model = whisper.load_model(model)
-    text = model.transcribe(path)
+    text = model.transcribe(path, word_timestamps=True)
     return text
 
     base, _ = os.path.splitext(path)
@@ -25,7 +26,7 @@ def transcribe_path(path, model='base', write_json=False, text_out=True):
             for l in text['text'].split('.'):
                 print(l + '.', file=f)
 
-class VideoTranscriber:
+class Transcriber:
     def __init__(self, url_or_path, model='base'):
         self._audio_path = self.extract_audio(url_or_path)
         self._model = whisper.load_model(model)
@@ -46,16 +47,14 @@ class VideoTranscriber:
 
     def extract_from_url(self, url):
         if is_youtube_url(url):
+            yt = YouTube(url)
+            out = f'{yt.title}.mp3'
             YouTube(url).streams.filter(
-                only_audio=True).first().download(filename="audio.mp3")
-            return 'audio.mp3'
+                only_audio=True).first().download(filename=out)
+            return out
         else:
             vid_path =  download_video(url)
             return self.audio_from_vid(vid_path)
-
-
-
-
 
     def extract_audio(self, what):
         if is_url(what):
@@ -84,13 +83,11 @@ class VideoTranscriber:
 
 
 
-
-def transcribe(what, model='base', write_json=True, text_out=True):
-    transcriber = URLTranscriber()
-    args = dict(model=model, write_json=write_json, text_out=text_out)
-    if validators.url(what):
-        return transcribe_url(what, **args)
-    elif os.path.exists(what):
-        return transcribe_path(what, **args)
-
+@click.command()
+@click.argument('what', type=click.STRING)
+@click.option('--write_json', is_flag=True, default=True)
+@click.option('--text_out', is_flag=True, default=True)
+def transcribe(what,write_json=True, text_out=True):
+    transcriber = Transcriber(what)
+    transcriber(write_json=write_json, text_out=text_out)
 
