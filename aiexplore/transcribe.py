@@ -87,7 +87,8 @@ class Transcriber:
 @click.argument('what', type=click.STRING)
 @click.option('--write_json', is_flag=True, default=True)
 @click.option('--text_out', is_flag=True, default=True)
-def transcribe(what,write_json=True, text_out=True):
-    transcriber = Transcriber(what)
+@click.option('--model', type=click.String, default='base')
+def transcribe(what,write_json, text_out, model):
+    transcriber = Transcriber(what, model=model)
     transcriber(write_json=write_json, text_out=text_out)
 
