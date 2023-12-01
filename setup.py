@@ -14,5 +14,6 @@ setup(name='aiexplore',
             'transcribe = aiexplore.transcribe:transcribe',
             ]
       },
-      install_requires = ['validators', 'pytube', 'moviepy', 'sjautils', 'Click'],
+      install_requires = ['validators', 'pytube', 'moviepy',
+                          'sjautils', 'Click', 'python-dotenv'],
       zip_safe=False)
